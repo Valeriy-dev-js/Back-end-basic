@@ -1,12 +1,18 @@
+import fs from 'fs';
+import path from 'path';
 
-// const tack = { uuid: 123123, name: 'Eat meat', create_at: 1234, done: false }
+const __dirname = path.resolve('/Task.json')
 
-// const data = JSON.stringify(tack)
 
 
 
 export const postTask = (req, res) =>{
-    // console.log("REQUEST" ,req.body);
-    res.send('heee')   
+    console.log("All done");
+    // res.send(req.body)   
+    const data = req.body
 
+
+    // fs.writeFile()
+    res.send(`Name: ${data.name} Done: ${data.done}`);
+    console.log('DIRNAME', __dirname);
 }

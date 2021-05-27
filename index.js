@@ -6,7 +6,7 @@ import getTasks from './routes/tasks.get.js'
 
 const app = express();
 
-
+app.use(express.json())
 app.use(getTasks);
 app.use(postTask)
 
