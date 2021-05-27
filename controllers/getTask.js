@@ -8,6 +8,7 @@ const todos = [
 
 
 
-export const tasck = (req, res) => {
-    res.json()
+export const getTasks = (req, res) => {
+    res.json(todos)
 }
+

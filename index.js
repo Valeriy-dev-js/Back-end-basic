@@ -1,20 +1,16 @@
 import express from 'express';
+import postTask from './routes/task.post.js';
+import getTasks from './routes/tasks.get.js'
+
+
 
 const app = express();
 
 
-// app.use('/about', (req, res, next) => {//     console.log('Middleware About');//     res.send("About")    // })
+app.use(getTasks);
+app.use(postTask)
 
-app.get('/', (req, res) =>{
-    // console.log('Route/ ');
-    res.send('<h1>Hello!</h1>')
-    
-})
 
-app.use('/about', (req, res) => {
-    const id = req.query.id;
-    res.send('<h1>Hello!</h1><p>id = ' + id + '</p>')
-})
 
 
 
