@@ -1,9 +1,17 @@
 import { Router } from "express";
+import { body, validationResult} from 'express-validator';
 import fs from 'fs';
 
 const router = Router();
 
-router.patch('/task/:id', (req, res) => {
+router.patch('/task/:id',
+    body('name').isString().isLength({ min: 2}),
+    body('done').isBoolean(),
+    (req, res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(422).send({errors: errors.array()});
+    };
     const id = req.params.id;
     const task = req.body;
     fs.readFile('Tasks.json', 'utf-8', (err, data) => {
