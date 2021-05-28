@@ -23,6 +23,9 @@ router.patch('/task/:id',
         const newTasks = [...tasks];
         const index = newTasks.findIndex(task => task.id === id);
         newTasks[index] = {...newTasks[index], name: task.name, done: task.done};
+        if(index === -1){
+            return res.status(401).send('Task not founded')
+        }
         const prettyJSON = JSON.stringify(newTasks, null, 2);
 
         fs.writeFile('Tasks.json', prettyJSON, err =>{
