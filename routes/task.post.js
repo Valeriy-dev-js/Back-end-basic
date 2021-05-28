@@ -10,8 +10,8 @@ router.post('/task', (req, res) => {
         };
         
         const task = req.body
-        const tacks = JSON.parse(data)
-        const newTasks = [...tacks, { id: uuidv4(), ...task, date: new Date(Date.now()) }];
+        const tasks = JSON.parse(data)
+        const newTasks = [...tasks, { id: uuidv4(), ...task, date: new Date(Date.now()) }];
         const prettyJSON = JSON.stringify(newTasks, null, 2)
 
         fs.writeFile(`Tasks.json`, prettyJSON, err => {
