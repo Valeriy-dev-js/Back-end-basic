@@ -5,8 +5,8 @@ const router = Router();
 
 
 router.get('/tasks',
-    query('filterBy').isString().optional({ checkFalsy: true }),
-    query('order').isString().optional({ checkFalsy: true }),
+    query('filterBy').isString(),
+    query('order').isString(),
     (req, res) => {
         const { filterBy, order = 'desc' } = req.query
 
