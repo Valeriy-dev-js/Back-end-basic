@@ -23,7 +23,7 @@ router.patch('/task/:id',
         const index = newTasks.findIndex(task => task.id === id);
         newTasks[index] = {...newTasks[index], name: task.name, done: task.done};
         if(index === -1){
-            return res.status(401).send({msg: `Task not found`, uuid: id})
+            return res.status(401).send({msg: `Task not found`, id: id})
         }
         const prettyJSON = JSON.stringify(newTasks, null, 2);
 
