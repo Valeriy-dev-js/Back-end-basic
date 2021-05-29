@@ -11,9 +11,7 @@ router.get('/tasks',
         const { filterBy, order = 'desc' } = req.query
 
         fs.readFile('Tasks.json', 'utf-8', (err, data) => {
-            if (err) {
-                throw err;
-            };
+            if(err) { return res.send({msg: 'Can`t read file', err: err}) };
             const tasks = JSON.parse(data);
 
             let filteredTasks = tasks;

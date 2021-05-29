@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { param, body, validationResult} from 'express-validator';
+import { body, validationResult} from 'express-validator';
 import fs from 'fs';
 
 const router = Router();
@@ -7,7 +7,6 @@ const router = Router();
 router.patch('/task/:id',
     body('name').isString().isLength({ min: 2}),
     body('done').isBoolean(),
-    param('id').isUUID().withMessage("id shold be UUID"),
     (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
