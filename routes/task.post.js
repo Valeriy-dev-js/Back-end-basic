@@ -13,21 +13,18 @@ router.post('/task',
         return res.status(400).send({errors: errors.array()});
     };
         fs.readFile('Tasks.json', 'utf-8', (err, data) => {
-            if (err) {
-                throw err;
-            };
-            
+            if(err) { return res.send({msg: 'Can`t read file', err: err}) };
             const task = req.body
             const tasks = JSON.parse(data)
             const newTasks = [...tasks, { id: uuidv4(), ...task, date: new Date(Date.now()) }];
             const prettyJSON = JSON.stringify(newTasks, null, 2)
 
             fs.writeFile(`Tasks.json`, prettyJSON, err => {
-                if (err) {
-                    throw err;
+                if(err) { 
+                    return res.send({msg: 'Can`t write file', err: err})
                 };
+                return res.send({msg: 'Tack was posted', task: task});
             });
-            // res.send(`Name: ${task.name} Done: ${task.done} Length: ${newTasks.length}`);
         });
 });
 
