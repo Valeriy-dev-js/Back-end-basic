@@ -6,7 +6,7 @@ import patchTask from './routes/task.patch.js'
 
 
 const app = express();
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 80;
 
 app.use(express.json())
 app.use(getTasks);
@@ -18,4 +18,4 @@ app.use(patchTask)
 
 
 
-app.listen(PORT, () => console.log('Server listening on port 3000...'))
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}...`))
