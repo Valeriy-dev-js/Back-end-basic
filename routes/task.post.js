@@ -12,7 +12,6 @@ router.post('/task',
         if (!errors.isEmpty()) {
             return res.status(400).send({ errors: errors.array() });
         };
-        
         fs.readFile('Tasks.json', 'utf-8', (err, data) => {
             if (err) { return res.send({ msg: 'Can`t read file', err: err }) };
             const task = req.body
