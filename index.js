@@ -6,7 +6,7 @@ import patchTask from './routes/task.patch.js'
 
 
 const app = express();
-const PORT = process.env.PORT || 80
+const PORT = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(getTasks);
