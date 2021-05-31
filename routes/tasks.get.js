@@ -7,6 +7,8 @@ const router = Router();
 router.get('/tasks',
     query('order').isString().optional({ checkFalsy: true }),
     query('filterBy').isString().optional({ checkFalsy: true }),
+    query('page').isNumeric().optional({ checkFalsy: true }),
+    query('limit').isNumeric().optional({ checkFalsy: true }),
     (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
