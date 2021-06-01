@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { sequelize, Task } = require('../models')
+const { Task } = require('../models')
 const { body, validationResult } = require('express-validator');
 const router = Router();
 
