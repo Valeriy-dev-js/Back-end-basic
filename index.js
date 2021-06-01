@@ -1,4 +1,5 @@
 const express = require('express');
+const { handleError } = require('./error')
 const postTask = require('./routes/task.post');
 const getTasks = require('./routes/tasks.get')
 const deleteTask = require('./routes/task.delete')
@@ -18,6 +19,9 @@ app.use(getTasks);
 app.use(postTask);
 app.use(deleteTask)
 app.use(patchTask)
+app.use((err, req, res, next) => {
+    handleError(err, res);
+  });
     
 
 
