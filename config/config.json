@@ -3,20 +3,20 @@
     "username": "postgres",
     "password": "user",
     "database": "db_todos",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
     "password": "user",
-    "database": "database_test",
+    "database": "db_todos",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
     "password": "user",
-    "database": "database_production",
+    "database": "db_todos",
     "host": "127.0.0.1",
     "dialect": "postgres"
   }
