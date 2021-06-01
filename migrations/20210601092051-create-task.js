@@ -3,7 +3,7 @@ const DataTypes = require('sequelize');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Tasks', {
-      id: {
+      uuid: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,        
         primaryKey: true

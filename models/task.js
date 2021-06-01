@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Task.init({
-    id: {
+    uuid: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,        
       primaryKey: true
