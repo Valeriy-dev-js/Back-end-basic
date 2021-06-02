@@ -25,7 +25,7 @@ router.delete('/task/:uuid',
         const task = await Task.destroy({where: 
             { uuid: uuid }
         });
-        return res.json(task)
+        return res.send("Task deleted")
     } catch (err) {
         next(err);
     };

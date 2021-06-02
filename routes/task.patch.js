@@ -7,7 +7,7 @@ const { ErrorHandler } = require('../error')
 const router = Router();
 
 router.patch('/task/:uuid',
-    body('name').isString().isLength({ min: 2 }),
+    body('name').trim().isString().isLength({ min: 2 }),
     body('done').isBoolean(),
     param('uuid').isUUID(),
     async (req, res, next) => {

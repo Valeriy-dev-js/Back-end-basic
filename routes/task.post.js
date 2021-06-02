@@ -6,7 +6,7 @@ const { ErrorHandler } = require('../error')
 const router = Router();
 
 router.post('/task',
-    body('name').isString().isLength({ min: 2 }),
+    body('name').trim().isString().isLength({ min: 2 }),
     body('done').isBoolean(),
     async (req, res, next) => {
         try {
