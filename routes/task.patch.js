@@ -3,7 +3,6 @@ const { Task } = require('../models')
 const { body, param, validationResult } = require('express-validator');
 const { ErrorHandler } = require('../error')
 
-
 const router = Router();
 
 router.patch('/task/:uuid',
