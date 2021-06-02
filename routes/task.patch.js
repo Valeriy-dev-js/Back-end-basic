@@ -14,7 +14,7 @@ router.patch('/task/:uuid',
         try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            throw new ErrorHandler(400, "invalid body", errors.array())
+            throw new ErrorHandler(400, "invalid request", errors.array())
         };
 
         const uuid = req.params.uuid;
