@@ -1,9 +1,9 @@
 const { Router } = require("express");
 const { Task } = require('../models')
 const { body, validationResult } = require('express-validator');
-const router = Router();
 const { ErrorHandler } = require('../error')
 
+const router = Router();
 
 router.post('/task',
     body('name').isString().isLength({ min: 2 }),
@@ -12,15 +12,15 @@ router.post('/task',
         try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            throw new ErrorHandler(422, "invalid querry", errors.array())
+            throw new ErrorHandler(400, "invalid body", errors.array())
         };
         const {name, done} = req.body;
-        const task = await Task.findOne({where: {name: name}})
-        if(task){
+        const taskName = await Task.findOne({where: {name: name}})
+        if(taskName){
             throw new ErrorHandler(422, "Task with same name not allowed")
         }
-        const user = await Task.create({name, done});
-        return res.json(user)
+        const task = await Task.create({name, done});
+        return res.json(task)
         } catch (err) {
             next(err)
         };

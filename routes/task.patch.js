@@ -1,28 +1,43 @@
 const { Router } = require("express");
 const { Task } = require('../models')
-const { body, validationResult } = require('express-validator');
+const { body, param, validationResult } = require('express-validator');
+const { ErrorHandler } = require('../error')
+
 
 const router = Router();
 
-router.patch('/task/:id',
+router.patch('/task/:uuid',
     body('name').isString().isLength({ min: 2 }),
     body('done').isBoolean(),
-    async (req, res) => {
+    param('uuid').isUUID(),
+    async (req, res, next) => {
+        try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(422).send({ errors: errors.array() });
+            throw new ErrorHandler(400, "invalid body", errors.array())
         };
 
-        const id = req.params.id;
+        const uuid = req.params.uuid;
         const { name, done } = req.body;
-        try {
-            const user = await Task.update({ name, done }, {where:{
-                uuid: id
-            }});
-            return res.json(user)
+
+        
+        const taskID = await Task.findOne({where: {uuid: uuid}});
+        if(!taskID){
+            throw new ErrorHandler(422, "Can`t find task")
+        };
+
+        const taskName = await Task.findOne({where: {name: name}})
+        if(taskName){
+            throw new ErrorHandler(422, "Task with same name not allowed");
+        }
+
+        await Task.update({ name, done }, {where:{
+            uuid: uuid
+        }});
+        
+        return res.json(req.body);
         } catch (err) {
-            console.log(err);
-            return res.send("Cant patch task")
+            next(err);
         };
 
 
