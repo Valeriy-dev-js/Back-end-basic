@@ -35,7 +35,7 @@ router.get('/tasks',
             })
 
             const pagesCount = Math.ceil(count / limit);
-            res.send({ pagesCount, Tasks: rows })
+            return res.send({ pagesCount, Tasks: rows })
             
         } catch (err) {
             next(err);
