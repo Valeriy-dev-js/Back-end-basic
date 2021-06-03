@@ -16,7 +16,7 @@ router.get('/tasks',
             if (!errors.isEmpty()) {
                 throw new ErrorHandler(400, "qerry", errors.array())
             };
-            const { filterBy = '', order = 'desc', curentPage = 1, limit } = req.query;
+            const { filterBy = '', order = 'desc', curentPage = 1, limit = 100 } = req.query;
 
             const filterQuery = { 'done': true, 'undone': false, '': [true, false] };
             const sorterQuery = { 'asc': 'ASC', 'desc': 'DESC' };
