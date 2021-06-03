@@ -1,10 +1,10 @@
 require('dotenv').config()
 module.exports =  {
   development: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
+    username: "kcbzqqtolbfptd",
+    password: "707b2581fc88f5210e6275838c65dff599f2f1afcb9f729efc3bcb3429184a03",
+    database: "d705jb8c4b6bg5",
+    host: 'ec2-54-155-254-112.eu-west-1.compute.amazonaws.com',
     dialect: "postgres"
   },
   test: {
@@ -22,7 +22,10 @@ module.exports =  {
     dialect: "postgres",
     ssl: true,
         dialectOptions: {
-            ssl: true
+            ssl: {
+              require: true,
+              rejectUnauthorized: false
+            }
         }
   }
 }
