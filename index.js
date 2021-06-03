@@ -23,12 +23,7 @@ app.use((err, req, res, next) => {
     handleError(err, res);
   });
     
-  app.listen({port: PORT}, async () => {
-    console.log('Server uo on');
-    await sequelize.authenticate();
-    console.log('Datebase synced!');
-  });
 
 
 
-// app.listen(PORT, () => console.log(`Server listening on port ${PORT}...`))
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}...`))
