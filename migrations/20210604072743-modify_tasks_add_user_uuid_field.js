@@ -7,9 +7,11 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         allowNull: false
     });
+    await queryInterface.removeConstraint('Tasks', 'Tasks_name_key',{})
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('Tasks', 'user_uuid')
+    await queryInterface.removeColumn('Tasks', 'user_uuid');
+    await queryInterface.addConstraint('Tasks', 'Tasks_name_key',{})
   }
 };

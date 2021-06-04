@@ -14,10 +14,10 @@ const app = express();
 
 
 app.use(express.json())
-app.use(getTasks);
-app.use(postTask);
 app.use(signupUser);
 app.use(loginUser);
+app.use(getTasks);
+app.use(postTask);
 app.use(deleteTask)
 app.use(patchTask)
 app.use((err, req, res, next) => {

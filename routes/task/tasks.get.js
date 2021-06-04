@@ -1,11 +1,14 @@
 const { Router } = require("express");
 const { Task } = require('../../models')
 const { query, validationResult } = require('express-validator');
-const { ErrorHandler } = require('../../error')
+const { ErrorHandler } = require('../../error');
+const authMiddleware = require('../../middlewares/authMiddleware')
+
 
 const router = Router();
 
 router.get('/tasks',
+    authMiddleware,
     query('order').isString().optional({ checkFalsy: true }),
     query('filterBy').isString().optional({ checkFalsy: true }),
     query('curentPage').isNumeric().optional({ checkFalsy: true }),
@@ -16,6 +19,8 @@ router.get('/tasks',
             if (!errors.isEmpty()) {
                 throw new ErrorHandler(400, "qerry", errors.array())
             };
+            const userUUID = req.user.uuid;
+            console.log(userUUID);
             const { filterBy = '', order = 'desc', curentPage = 1, limit = 100 } = req.query;
 
             const filterQuery = { 'done': true, 'undone': false, '': [true, false] };
@@ -27,6 +32,7 @@ router.get('/tasks',
 
             const { count, rows } = await Task.findAndCountAll({
                 where: {
+                    user_uuid: userUUID,
                     done: filterQuery[filterBy]
                 },
                 order: [['createdAt', sorterQuery[order]]],
