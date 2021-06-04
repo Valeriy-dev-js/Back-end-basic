@@ -23,18 +23,18 @@ router.patch('/task/:uuid',
         const taskUUID = req.params.uuid;
         const { name, done } = req.body;
 
-        
         const taskID = await Task.findOne({where: {uuid: taskUUID, user_uuid:userUUID }});
         if(!taskID){
-            throw new ErrorHandler(422, "Can`t find task")
+            throw new ErrorHandler(422, "Can`t find task");
         };
-        const taskName = await Task.findOne({where: {name: name, user_uuid:userUUID}})
+        const taskName = await Task.findOne({where: {name: name, user_uuid:userUUID}});
         if(taskName){
-            throw new ErrorHandler(422, "Task with same name not allowed")
-        }
+            throw new ErrorHandler(422, "Task with same name not allowed");
+        };
 
         await Task.update({ name, done }, {where:{
-            uuid: taskUUID
+            uuid: taskUUID, 
+            user_uuid: userUUID
         }});
         
         return res.json(req.body);

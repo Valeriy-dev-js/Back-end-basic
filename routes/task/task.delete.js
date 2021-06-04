@@ -2,12 +2,15 @@ const { Router } = require("express");
 const { Task } = require('../../models');
 const { param, validationResult } = require('express-validator');
 const { ErrorHandler } = require('../../error')
+const authMiddleware = require('../../middlewares/authMiddleware');
+
 
 const router = Router();
 
 
 
-router.delete('/task/:uuid', 
+router.delete('/task/:uuid',
+    authMiddleware,
     param('uuid').isUUID(),
     async (req, res, next) => {
         try {
@@ -16,15 +19,18 @@ router.delete('/task/:uuid',
             throw new ErrorHandler(400, "invalid request", errors.array())
         };
 
-        const uuid = req.params.uuid;
+        const userUUID = res.locals.user.uuid;
+        const taskUUID = req.params.uuid;
 
-        const taskID = await Task.findOne({where: {uuid: uuid}});
+        const taskID = await Task.findOne({where: {uuid: taskUUID, user_uuid: userUUID}});
         if(!taskID){
-            throw new ErrorHandler(422, "Can`t find task")
+            throw new ErrorHandler(422, "Can`t find task");
         };
-        const task = await Task.destroy({where: 
-            { uuid: uuid }
-        });
+
+        await Task.destroy({where: {
+            uuid: taskUUID,
+            user_uuid: userUUID
+        }});
         return res.send("Task deleted")
     } catch (err) {
         next(err);
