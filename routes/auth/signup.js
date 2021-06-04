@@ -1,11 +1,11 @@
 const { Router } = require("express");
-const { User } = require('../models')
+const { User } = require('../../models')
 const { body, validationResult } = require('express-validator');
-const { ErrorHandler } = require('../error')
+const { ErrorHandler } = require('../../error')
 
 const router = Router();
 
-router.post('/user',
+router.post('/signup',
     body('name').trim().isString().isLength({ min: 4 }),
     body('password').isString().isLength({ min: 4 }),
     async (req, res, next) => {

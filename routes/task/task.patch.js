@@ -1,7 +1,7 @@
 const { Router } = require("express");
-const { Task } = require('../models')
+const { Task } = require('../../models')
 const { body, param, validationResult } = require('express-validator');
-const { ErrorHandler } = require('../error')
+const { ErrorHandler } = require('../../error')
 
 const router = Router();
 
