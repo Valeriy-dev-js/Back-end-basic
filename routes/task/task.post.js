@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { Task } = require('../../models')
 const { body, validationResult } = require('express-validator');
 const { ErrorHandler } = require('../../error')
-const authMiddleware = require('../../middlewares/authMiddleware')
+const authMiddleware = require('../../middlewares/authMiddleware');
 
 
 const router = Router();
@@ -15,18 +15,16 @@ router.post('/task',
         try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            throw new ErrorHandler(400, "invalid body", errors.array())
+            throw new ErrorHandler(400, "invalid body", errors.array());
         };
-        const userUUID = req.user.uuid
-        // console.log('UUIDu', userUUID);
+        const userUUID = res.locals.user.uuid;
         const {name, done} = req.body;
-        const taskName = await Task.findOne({where: {name: name, user_uuid:userUUID}})
-        // console.log("taskName",taskName);
+        const taskName = await Task.findOne({where: {name: name, user_uuid:userUUID}});
         if(taskName){
-            throw new ErrorHandler(422, "Task with same name not allowed")
+            throw new ErrorHandler(422, "Task with same name not allowed");
         }
         const task = await Task.create({ user_uuid: userUUID , name, done});
-        return res.json(task)
+        return res.json(task);
         } catch (err) {
             next(err)
         };

@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
             if (err) {
                 throw new ErrorHandler(422, "Incorrect token");
             };
-            req.user = decoded;
+            res.locals.user = decoded;
         });
         next()
     } catch (err) {
