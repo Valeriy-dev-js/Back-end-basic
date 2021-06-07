@@ -27,10 +27,6 @@ router.patch('/task/:uuid',
         if(!taskID){
             throw new ErrorHandler(422, "Can`t find task");
         };
-        const taskName = await Task.findOne({where: {name: name, user_uuid:userUUID}});
-        if(taskName){
-            throw new ErrorHandler(422, "Task with same name not allowed");
-        };
 
         await Task.update({ name, done }, {where:{
             uuid: taskUUID, 
