@@ -17,7 +17,7 @@ router.post('/signup',
         const {name, password} = req.body;
         const userName = await User.findOne({where: {name: name}})
         if(userName){
-            throw new ErrorHandler(422, "User with same name not allowed")
+            throw new ErrorHandler(422, "User is already registered")
         }
         const user = await User.create({name, password});
         return res.json(user)
