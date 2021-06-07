@@ -29,6 +29,7 @@ router.post('/login',
         const token = jwt.sign({uuid}, process.env.SECRET, {expiresIn:'24h'})
         return res.json({token});
         } catch (err) {
+            console.log(err);
             next(err);
         };
     });
