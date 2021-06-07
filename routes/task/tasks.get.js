@@ -9,8 +9,8 @@ const router = Router();
 
 router.get('/tasks',
     authMiddleware,
-    query('order').isString().toUpperCase().optional({ checkFalsy: true }),
-    query('filterBy').isString().optional({ checkFalsy: true }),
+    query('order').isString().isIn(['asc', 'desc']).toUpperCase().optional({ checkFalsy: true }),
+    query('filterBy').isString().isIn(['done', 'undone']).optional({ checkFalsy: true }),
     query('curentPage').isNumeric().optional({ checkFalsy: true }),
     query('limit').isNumeric().optional({ checkFalsy: true }),
     async (req, res, next) => {
@@ -20,34 +20,20 @@ router.get('/tasks',
                 throw new ErrorHandler(400, "qerry", errors.array())
             };
             const userUUID = res.locals.user.uuid;
-            console.log(userUUID);
-            const { filterBy = '' , order, curentPage = 1, limit = 100 } = req.query;
+            
+            const { filterBy, order, curentPage = 1, limit = 100 } = req.query;
+            const filterQuery = { 'done': true, 'undone': false };
 
-            const filterQuery = { 'done': true, 'undone': false, '': [true, false] };
-            // const sorterQuery = { 'asc': 'ASC', 'desc': 'DESC' };
-            console.log(filterQuery[filterBy]);
-            // if (filterQuery[filterBy] === undefined) {
-            //     throw new ErrorHandler(400, "Incorrect query");
-            // };
-            // const find = { where: { user_uuid: userUUID,
-            //     user_uuid: userUUID,
-            //     done: filterQuery[filterBy]
-            //     },
-            //     order: [['createdAt', order]],
-            //     limit: limit,
-            //     offset: limit * ( curentPage - 1 ),
-
-            // };
-            const filter = { 
-                where: { user_uuid: userUUID }, 
-                limit: limit, 
-                offset: limit * (curentPage - 1) 
+            const filter = {
+                where: { user_uuid: userUUID },
+                offset: limit * (curentPage - 1),
+                limit: limit
             };
+            if (order) filter.order = [['createdAt', order]];
+            if (filterBy) filter.where.done = filterQuery[filterBy];
 
-            if(order) find.order = [['createdAt', order]];
-            // if(filterBy !== undefined) find.where.done = filterQuery[filterBy];
-
-            const { count, rows } = await Task.findAndCountAll({where: {user_uuid: userUUID}});
+            const { count, rows } = await Task.findAndCountAll(filter);
+            console.log(count);
 
             const pagesCount = Math.ceil(count / limit);
             return res.send({ pagesCount, Tasks: rows })
