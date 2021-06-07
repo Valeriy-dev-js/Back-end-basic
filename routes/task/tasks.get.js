@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { Task } = require('../../models')
+const { User } = require('../../models')
 const { query, validationResult } = require('express-validator');
 const { ErrorHandler } = require('../../error');
 const authMiddleware = require('../../middlewares/authMiddleware')
@@ -20,8 +21,8 @@ router.get('/tasks',
                 throw new ErrorHandler(400, "qerry", errors.array())
             };
             const userUUID = res.locals.user.uuid;
-            console.log("USER",userUUID);
-            
+            const user = await User.findOne({ where: { uuid: userUUID } });
+            const userName = user.dataValues.name
             const { filterBy, order, curentPage = 1, limit = 100 } = req.query;
             const filterQuery = { 'done': true, 'undone': false };
 
@@ -34,10 +35,9 @@ router.get('/tasks',
             if (filterBy) filter.where.done = filterQuery[filterBy];
 
             const { count, rows } = await Task.findAndCountAll(filter);
-            console.log(count);
 
             const pagesCount = Math.ceil(count / limit);
-            return res.send({ pagesCount, Tasks: rows })
+            return res.send({ pagesCount, userName, tasks: rows })
 
         } catch (err) {
             next(err);
