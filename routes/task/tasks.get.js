@@ -20,6 +20,7 @@ router.get('/tasks',
                 throw new ErrorHandler(400, "qerry", errors.array())
             };
             const userUUID = res.locals.user.uuid;
+            console.log("USER",userUUID);
             
             const { filterBy, order, curentPage = 1, limit = 100 } = req.query;
             const filterQuery = { 'done': true, 'undone': false };

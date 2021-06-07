@@ -7,6 +7,9 @@ module.exports = (req, res, next) => {
     };
 
     try {
+        if(!req.headers.authorization){
+            throw new ErrorHandler(403, "Missing headers");
+        }
         const token = req.headers.authorization.split(' ')[1]
             if (!token) {
             throw new ErrorHandler(403, "User isn`t authorized");
