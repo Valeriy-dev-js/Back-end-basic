@@ -12,7 +12,7 @@ router.post('/signup',
         try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            throw new ErrorHandler(400, "invalid body", errors.array())
+            throw new ErrorHandler(400, 'Incorrect Username or Password');
         };
         const {name, password} = req.body;
         const userName = await User.findOne({where: {name: name}})
