@@ -14,27 +14,24 @@ router.delete('/task/:uuid',
     param('uuid').isUUID(),
     async (req, res, next) => {
         try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            throw new ErrorHandler(400, "invalid request", errors.array())
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                throw new ErrorHandler(400, "invalid request", errors.array())
+            };
+
+            const user_uuid = res.locals.user.uuid;
+            const uuid = req.params.uuid;
+
+            const exsistingTask = await Task.findOne({ where: { uuid, user_uuid } });
+            if (!exsistingTask) {
+                throw new ErrorHandler(422, "Can`t find task");
+            };
+
+            await Task.destroy({ where: { uuid, user_uuid } });
+            return res.send("Task deleted")
+        } catch (err) {
+            next(err);
         };
-
-        const userUUID = res.locals.user.uuid;
-        const taskUUID = req.params.uuid;
-
-        const taskID = await Task.findOne({where: {uuid: taskUUID, user_uuid: userUUID}});
-        if(!taskID){
-            throw new ErrorHandler(422, "Can`t find task");
-        };
-
-        await Task.destroy({where: {
-            uuid: taskUUID,
-            user_uuid: userUUID
-        }});
-        return res.send("Task deleted")
-    } catch (err) {
-        next(err);
-    };
-});
+    });
 
 module.exports = router;
