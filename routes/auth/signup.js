@@ -15,8 +15,8 @@ router.post('/signup',
             throw new ErrorHandler(400, 'Incorrect Username or Password');
         };
         const {name, password} = req.body;
-        const exsistingUserWithPassword = await User.findOne({where: {name: name}})
-        if(exsistingUserWithPassword){
+        const exsistingUser = await User.findOne({where: {name: name}})
+        if(exsistingUser){
             throw new ErrorHandler(422, "User is already registered")
         }
         const newUser = await User.create({name, password});
