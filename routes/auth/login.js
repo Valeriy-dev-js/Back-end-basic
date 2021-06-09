@@ -16,13 +16,13 @@ router.post('/login',
             throw new ErrorHandler(400, "invalid body", errors.array());
         };
         const {name, password} = req.body;
-        const userName = await User.findOne({where: {name}});
-        if(!userName){
+        const exsistingUser = await User.findOne({where: {name}});
+        if(!exsistingUser){
             throw new ErrorHandler(422, "Can`t find User");
         };
 
-        const userPassword = await User.findOne({where: { name, password }});
-        if(!userPassword){
+        const exsistingUserWithPassword = await User.findOne({where: { name, password }});
+        if(!exsistingUserWithPassword){
             throw new ErrorHandler(422, "Incorrect password");
         };
         const uuid = userPassword.dataValues.uuid
