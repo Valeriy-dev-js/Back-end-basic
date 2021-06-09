@@ -25,7 +25,7 @@ router.post('/login',
         if(!exsistingUserWithPassword){
             throw new ErrorHandler(422, "Incorrect password");
         };
-        const uuid = userPassword.dataValues.uuid
+        const uuid = exsistingUserWithPassword.dataValues.uuid
         const token = jwt.sign({uuid}, process.env.SECRET, {expiresIn:'24h'})
         return res.json({token});
         } catch (err) {
