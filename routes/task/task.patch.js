@@ -14,26 +14,23 @@ router.patch('/task/:uuid',
     param('uuid').isUUID(),
     async (req, res, next) => {
         try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            throw new ErrorHandler(400, "invalid request", errors.array())
-        };
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                throw new ErrorHandler(400, "invalid request", errors.array())
+            };
 
-        const userUUID = res.locals.user.uuid;
-        const taskUUID = req.params.uuid;
-        const { name, done } = req.body;
+            const user_uuid = res.locals.user.uuid;
+            const uuid = req.params.uuid;
+            const { name, done } = req.body;
 
-        const taskID = await Task.findOne({where: {uuid: taskUUID, user_uuid:userUUID }});
-        if(!taskID){
-            throw new ErrorHandler(422, "Can`t find task");
-        };
+            const exsistingTask = await Task.findOne({ where: { uuid, user_uuid } });
+            if (!exsistingTask) {
+                throw new ErrorHandler(422, "Can`t find task");
+            };
 
-        await Task.update({ name, done }, {where:{
-            uuid: taskUUID, 
-            user_uuid: userUUID
-        }});
-        
-        return res.json(req.body);
+            await Task.update({ name, done }, { where: { uuid, user_uuid } });
+
+            return res.json(req.body);
         } catch (err) {
             next(err);
         };
