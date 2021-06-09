@@ -20,14 +20,13 @@ router.get('/tasks',
             if (!errors.isEmpty()) {
                 throw new ErrorHandler(400, "qerry", errors.array())
             };
-            const userUUID = res.locals.user.uuid;
-            const user = await User.findOne({ where: { uuid: userUUID } });
-            const userName = user.dataValues.name
+            const user_uuid = res.locals.user.uuid;
+            const { name } = await User.findOne({ where: { uuid: user_uuid } });
             const { filterBy, order, curentPage = 1, limit = 100 } = req.query;
             const filterQuery = { 'done': true, 'undone': false };
 
             const filter = {
-                where: { user_uuid: userUUID },
+                where: { user_uuid },
                 offset: limit * (curentPage - 1),
                 limit: limit
             };
@@ -37,7 +36,7 @@ router.get('/tasks',
             const { count, rows } = await Task.findAndCountAll(filter);
 
             const pagesCount = Math.ceil(count / limit);
-            return res.send({ pagesCount, userName, tasks: rows })
+            return res.send({ pagesCount, userName: name, tasks: rows })
 
         } catch (err) {
             next(err);
