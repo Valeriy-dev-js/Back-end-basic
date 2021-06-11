@@ -17,13 +17,12 @@ router.patch('/task/:uuid',
         const uuid = req.params.uuid;
         const { name, done } = req.body;
         try {
-            const exsistingTask = await Task.findOne({ where: { uuid, user_uuid } });
-            if (!exsistingTask) {
+            const task = await Task.findOne({ where: { uuid, user_uuid } });
+            if (!task) {
                 throw new ErrorHandler(422, "Can`t find task");
             };
 
             await Task.update({ name, done }, { where: { uuid, user_uuid } });
-
             return res.json(req.body);
         } catch (err) {
             next(err);

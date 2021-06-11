@@ -13,8 +13,8 @@ router.post('/signup',
     async (req, res, next) => {
         const { name, password } = req.body;
         try {
-            const exsistingUser = await User.findOne({ where: { name } })
-            if (exsistingUser) {
+            const user = await User.findOne({ where: { name } })
+            if (user) {
                 throw new ErrorHandler(422, "User is already registered")
             }
             const newUser = await User.create({ name, password });
