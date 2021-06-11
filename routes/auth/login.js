@@ -1,14 +1,14 @@
 require('dotenv').config()
 const { Router } = require("express");
 const { User } = require('../../models')
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
 const { ErrorHandler } = require('../../error');
 const jwt = require('jsonwebtoken');
-const validatorMiddleware = require('../../middlewares/validatorMiddleware')
+const validatorMiddleware = require('../../middlewares/validatorMiddleware');
 const router = Router();
 
 router.post('/login',
-    body('name').trim().isString().isLength({ min: 4 }).withMessage('Invalid User name'),
+    body('name').trim().isString().isLength({ min: 4 }).withMessage('Invalid username'),
     body('password').isString().isLength({ min: 4 }).withMessage('Invalid password'),
     validatorMiddleware,
     async (req, res, next) => {
