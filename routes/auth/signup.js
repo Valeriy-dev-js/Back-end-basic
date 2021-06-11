@@ -11,14 +11,14 @@ router.post('/signup',
     body('password').isString().isLength({ min: 4 }).withMessage('Invalid password'),
     validatorMiddleware,
     async (req, res, next) => {
-        const {name, password} = req.body;
+        const { name, password } = req.body;
         try {
-        const exsistingUser = await User.findOne({where: {name: name}})
-        if(exsistingUser){
-            throw new ErrorHandler(422, "User is already registered")
-        }
-        const newUser = await User.create({name, password});
-        return res.json(newUser)
+            const exsistingUser = await User.findOne({ where: { name } })
+            if (exsistingUser) {
+                throw new ErrorHandler(422, "User is already registered")
+            }
+            const newUser = await User.create({ name, password });
+            return res.json(newUser)
         } catch (err) {
             next(err)
         };
