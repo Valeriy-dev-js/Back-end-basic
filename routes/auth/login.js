@@ -5,6 +5,7 @@ const { body } = require('express-validator');
 const { ErrorHandler } = require('../../error');
 const jwt = require('jsonwebtoken');
 const validatorMiddleware = require('../../middlewares/validatorMiddleware');
+const bcrypt = require('bcrypt')
 const router = Router();
 
 router.post('/login',
@@ -12,22 +13,21 @@ router.post('/login',
     body('password').isString().isLength({ min: 4 }).withMessage('Invalid password'),
     validatorMiddleware,
     async (req, res, next) => {
-        const {name, password} = req.body;
+        const { name, password } = req.body;
         try {
-        const exsistingUser = await User.findOne({where: {name}});
-        if(!exsistingUser){
-            throw new ErrorHandler(422, "Can`t find User");
-        };
+            const user = await User.findOne({ where: { name } });
+            if (!user) {
+                throw new ErrorHandler(422, `Can't find user ${name}`);
+            };
 
-        const exsistingUserWithPassword = await User.findOne({where: { name, password }});
-        if(!exsistingUserWithPassword){
-            throw new ErrorHandler(422, "Incorrect password");
-        };
-        const uuid = exsistingUserWithPassword.dataValues.uuid
-        const token = jwt.sign({uuid}, process.env.SECRET, {expiresIn:'24h'})
-        return res.json({token});
+            const validPassword = bcrypt.compareSync(password, user.password);
+            if (!validPassword) {
+                throw new ErrorHandler(422, "Incorrect password");
+            };
+
+            const token = jwt.sign({ uuid: user.uuid }, process.env.SECRET, { expiresIn: '24h' })
+            return res.json({ token });
         } catch (err) {
-            console.log(err);
             next(err);
         };
     });
