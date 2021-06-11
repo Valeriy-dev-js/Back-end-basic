@@ -12,12 +12,8 @@ router.post('/login',
     body('password').isString().isLength({ min: 4 }).withMessage('Invalid password'),
     validatorMiddleware,
     async (req, res, next) => {
-        try {
-        // const errors = validationResult(req);
-        // if (!errors.isEmpty()) {
-        //     throw new ErrorHandler(400, "invalid body", errors.array());
-        // };
         const {name, password} = req.body;
+        try {
         const exsistingUser = await User.findOne({where: {name}});
         if(!exsistingUser){
             throw new ErrorHandler(422, "Can`t find User");
