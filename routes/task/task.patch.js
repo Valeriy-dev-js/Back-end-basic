@@ -3,26 +3,20 @@ const { Task } = require('../../models')
 const { body, param, validationResult } = require('express-validator');
 const { ErrorHandler } = require('../../error');
 const authMiddleware = require('../../middlewares/authMiddleware');
-
-
+const validatorMiddleware = require('../../middlewares/validatorMiddleware');
 const router = Router();
 
 router.patch('/task/:uuid',
     authMiddleware,
-    body('name').trim().isString().isLength({ min: 2 }),
-    body('done').isBoolean(),
-    param('uuid').isUUID(),
+    body('name').trim().isString().isLength({ min: 2 }).withMessage('Invalid name'),
+    body('done').isBoolean().withMessage('Invalid done'),
+    param('uuid').isUUID().withMessage('Invalid uuid'),
+    validatorMiddleware,
     async (req, res, next) => {
+        const user_uuid = res.locals.user.uuid;
+        const uuid = req.params.uuid;
+        const { name, done } = req.body;
         try {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                throw new ErrorHandler(400, "invalid request", errors.array())
-            };
-
-            const user_uuid = res.locals.user.uuid;
-            const uuid = req.params.uuid;
-            const { name, done } = req.body;
-
             const exsistingTask = await Task.findOne({ where: { uuid, user_uuid } });
             if (!exsistingTask) {
                 throw new ErrorHandler(422, "Can`t find task");
