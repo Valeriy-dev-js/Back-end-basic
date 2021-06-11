@@ -1,8 +1,6 @@
 const { Router } = require("express");
-const { Task } = require('../../models')
-const { User } = require('../../models')
+const { Task } = require('../../models');
 const { query } = require('express-validator');
-const { ErrorHandler } = require('../../error');
 const authMiddleware = require('../../middlewares/authMiddleware');
 const validatorMiddleware = require('../../middlewares/validatorMiddleware');
 const router = Router();
@@ -26,7 +24,6 @@ router.get('/tasks',
         if (order) filter.order = [['createdAt', order]];
         if (filterBy) filter.where.done = filterQuery[filterBy];
         try {
-            const { name } = await User.findOne({ where: { uuid: user_uuid } });
             const { count, rows } = await Task.findAndCountAll(filter);
             const pagesCount = Math.ceil(count / limit);
             return res.send({ pagesCount, tasks: rows })
