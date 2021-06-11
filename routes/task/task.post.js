@@ -8,7 +8,7 @@ const router = Router();
 
 router.post('/task',
     authMiddleware,
-    body('name').trim().isString().isLength({ min: 2 }).withMessage('Invalid name'),
+    body('name').trim().isString().isLength({ min: 2 }).withMessage('Invalid Taskname'),
     body('done').isBoolean().withMessage('Invalid done'),
     validatorMiddleware,
     async (req, res, next) => {
