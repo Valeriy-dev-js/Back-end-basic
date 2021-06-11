@@ -4,17 +4,19 @@ const { User } = require('../../models')
 const { body, validationResult } = require('express-validator');
 const { ErrorHandler } = require('../../error');
 const jwt = require('jsonwebtoken');
+const validatorMiddleware = require('../../middlewares/validatorMiddleware')
 const router = Router();
 
 router.post('/login',
-    body('name').trim().isString().isLength({ min: 4 }),
-    body('password').isString().isLength({ min: 4 }),
+    body('name').trim().isString().isLength({ min: 4 }).withMessage('Invalid User name'),
+    body('password').isString().isLength({ min: 4 }).withMessage('Invalid password'),
+    validatorMiddleware,
     async (req, res, next) => {
         try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            throw new ErrorHandler(400, "invalid body", errors.array());
-        };
+        // const errors = validationResult(req);
+        // if (!errors.isEmpty()) {
+        //     throw new ErrorHandler(400, "invalid body", errors.array());
+        // };
         const {name, password} = req.body;
         const exsistingUser = await User.findOne({where: {name}});
         if(!exsistingUser){
