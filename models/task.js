@@ -31,6 +31,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
+    order: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      autoIncrement: true
+    }
   }, {
     sequelize,
     modelName: 'Task',
