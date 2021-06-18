@@ -15,14 +15,16 @@ router.post('/task',
         const user_uuid = res.locals.user.uuid;
         const { name, done } = req.body;
         try {
-            const task = await Task.findOne({ where: { name, user_uuid } });
+            const task = await Task.findOne({ where: { name } });
             if (task) {
                 throw new ErrorHandler(422, "Task with same name not allowed");
             }
+            console.log(1);
             const newTask = await Task.create({ user_uuid, name, done });
             return res.json(newTask);
         } catch (err) {
-            next(err)
+            // next(err)
+            console.log(err);
         };
     });
 
